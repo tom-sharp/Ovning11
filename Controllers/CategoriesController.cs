@@ -10,95 +10,62 @@ using Ovning11.Models;
 
 namespace Ovning11.Controllers
 {
-    public class ProductsController : Controller
+    public class CategoriesController : Controller
     {
         private readonly Ovning11Context _context;
 
-        public ProductsController(Ovning11Context context)
+        public CategoriesController(Ovning11Context context)
         {
             _context = context;
         }
 
-        // GET: Products
+        // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Product.ToListAsync());
+            return View(await _context.Category.ToListAsync());
         }
 
-
-		// GET: Lists Products Inventory
-		public async Task<IActionResult> InventoryList()
-		{
-			var myinventorylist = new List<ProductViewModel>();
-			var mylist = await _context.Product.ToListAsync();
-			foreach (var prod in mylist)
-			{
-				myinventorylist.Add(new ProductViewModel(prod.Name, prod.Count, prod.Price));
-			}
-			return View(myinventorylist);
-		}
-		// GET: Lists Products Inventory
-		public async Task<IActionResult> SearchCategory(string category = null, string product = null)
-		{
-			List<Product> catprod;
-			List<Product> res;
-			if (category != null){
-				if (category == "All") catprod = await _context.Product.ToListAsync();
-				else catprod = await _context.Product.Where(prod => prod.Category == category).ToListAsync();
-				if ((product == null) || (product.Length == 0)) res = catprod;
-				else res = catprod.Where(prod => prod.Name.ToLower().Contains(product.ToLower())).ToList();
-			}
-			else res = new List<Product>();
-
-			var result = new SearchCategoryViewModel();
-			result.SearchResult = res;
-			result.CategorySearch = product;
-			result.Categories = await _context.Category.ToListAsync();
-
-			return View(result);
-		}
-
-		// GET: Products/Details/5
-		public async Task<IActionResult> Details(int? id)
+        // GET: Categories/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var product = await _context.Product
+            var category = await _context.Category
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(category);
         }
 
-        // GET: Products/Create
+        // GET: Categories/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
+        // POST: Categories/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Price,Orderdate,Category,Shelf,Count,Description")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Category category)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
+                _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(category);
         }
 
-        // GET: Products/Edit/5
+        // GET: Categories/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -106,22 +73,22 @@ namespace Ovning11.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product.FindAsync(id);
-            if (product == null)
+            var category = await _context.Category.FindAsync(id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(product);
+            return View(category);
         }
 
-        // POST: Products/Edit/5
+        // POST: Categories/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Price,Orderdate,Category,Shelf,Count,Description")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name")] Category category)
         {
-            if (id != product.Id)
+            if (id != category.Id)
             {
                 return NotFound();
             }
@@ -130,12 +97,12 @@ namespace Ovning11.Controllers
             {
                 try
                 {
-                    _context.Update(product);
+                    _context.Update(category);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductExists(product.Id))
+                    if (!CategoryExists(category.Id))
                     {
                         return NotFound();
                     }
@@ -146,10 +113,10 @@ namespace Ovning11.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(product);
+            return View(category);
         }
 
-        // GET: Products/Delete/5
+        // GET: Categories/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -157,30 +124,30 @@ namespace Ovning11.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Product
+            var category = await _context.Category
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (product == null)
+            if (category == null)
             {
                 return NotFound();
             }
 
-            return View(product);
+            return View(category);
         }
 
-        // POST: Products/Delete/5
+        // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var product = await _context.Product.FindAsync(id);
-            _context.Product.Remove(product);
+            var category = await _context.Category.FindAsync(id);
+            _context.Category.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProductExists(int id)
+        private bool CategoryExists(int id)
         {
-            return _context.Product.Any(e => e.Id == id);
+            return _context.Category.Any(e => e.Id == id);
         }
     }
 }

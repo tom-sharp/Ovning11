@@ -15,5 +15,7 @@ namespace Ovning11.Data
         }
 
         public DbSet<Ovning11.Models.Product> Product { get; set; }
+
+        public DbSet<Ovning11.Models.Category> Category { get; set; }
     }
 }

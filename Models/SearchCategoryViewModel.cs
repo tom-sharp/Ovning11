@@ -7,12 +7,8 @@ namespace Ovning11.Models
 {
 	public class SearchCategoryViewModel
 	{
-		public SearchCategoryViewModel(string category, List<Product> result)
-		{
-			this.CategorySearch = category;
-			this.SearchResult = result;
-		}
 		public string CategorySearch { get; set; }
+		public List<Category> Categories { get; set; }
 		public List<Product> SearchResult { get; set; }
 	}
 }

@@ -4,10 +4,17 @@
 }
 
 
-<h1>Category Search</h1>
+<h1>Product Search</h1>
 
 <form>
-	<input type="text" placeholder="Enter category" name="category"/><input type="submit" value="Search" />
+	<select name="category">
+		<option value="All">All categories</option>
+		@foreach (var item in Model.Categories)
+		{
+			<option asp-value="item.Name">@item.Name</option>
+		}
+	</select>
+	<input type="text" placeholder="Enter product" name="product"/><input type="submit" value="Search" />
 </form>
 <table class="table">
 	<thead>
